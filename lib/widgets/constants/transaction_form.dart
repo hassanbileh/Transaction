@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:transaction/models/transaction.dart';
 
 class TransactionForm extends StatelessWidget {
   final TextEditingController _titleController;
   final TextEditingController _amountController;
-  final VoidCallback _submitData;
   final VoidCallback showCalendar;
   final String _selectedDate;
-  final Category category = Category.food; 
 
   const TransactionForm({
+    super.key, 
     required TextEditingController titleController,
-    required VoidCallback submitData,
     required this.showCalendar,
     required TextEditingController amountController,
     required String selectedDate,
-  })  : _submitData = submitData,
-        _selectedDate = selectedDate,
+  })  : _selectedDate = selectedDate,
         _amountController = amountController,
         _titleController = titleController;
 
@@ -62,23 +58,6 @@ class TransactionForm extends StatelessWidget {
           const SizedBox(
             height: 30,
           ),
-          Row(
-            children: [
-              DropdownButton(
-                items: Category.values
-                    .map((category) => DropdownMenuItem(
-                          value: category,
-                          child: Text(category.name),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  print(value);
-                },
-              ),
-              TextButton(onPressed: () {}, child: const Text('Cancel'),),
-              TextButton(onPressed: _submitData, child: const Text('Confirm')),
-            ],
-          )
         ],
       ),
     );

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:transaction/models/transaction.dart';
 import 'package:transaction/widgets/constants/transaction_form.dart';
 
 final formatter = DateFormat.yMMMd();
@@ -19,6 +20,7 @@ class _NewTransactionState extends State<NewTransaction> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime? _selectedDate;
+  Category? _selectedCategory = Category.leisure;
 
   @override
   void initState() {
@@ -49,18 +51,44 @@ class _NewTransactionState extends State<NewTransaction> {
   }
 
   void _submitData() {
-    final enteredTitle = _titleController.text;
+    final enteredTitle = _titleController.text.trim();
     final enteredAmount = double.parse(_amountController.text);
     final enteredDate = _selectedDate;
-    if (enteredTitle.isEmpty || enteredAmount <= 0 || enteredDate == null) {
+    final enteredCategory = _selectedCategory;
+    if (enteredTitle.isEmpty || enteredAmount <= 0 || enteredDate == null || enteredCategory == null) {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Invalid input'),
+          content: const Text(
+              'Please make sure a valid title, amount, date and category was entered.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(ctx);
+              },
+              child: const Text('Okay'),
+            ),
+          ],
+        ),
+      );
       return;
     }
 
     //widget s'ajoute lorsqu'on a transformer en Statefull widget pour acceder a la propriété de la classe widget
-    widget.addTx(enteredTitle, enteredAmount, enteredDate);
+    widget.addTx(enteredTitle, enteredAmount, enteredDate, enteredCategory);
 
     // Fermer automatiquement le formulaire après avoir ajouter
     Navigator.of(context).pop();
+  }
+
+  _submitCategory(Category? category) {
+    setState(() {
+      if (category == null) {
+        return;
+      }
+      _selectedCategory = category;
+    });
   }
 
   @override
@@ -69,14 +97,44 @@ class _NewTransactionState extends State<NewTransaction> {
       height: 400,
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.all(10),
-      child: TransactionForm(
-        titleController: _titleController,
-        submitData: _submitData,
-        showCalendar: _afficheCalendrier,
-        amountController: _amountController,
-        selectedDate: _selectedDate == null
-            ? 'Selecte Date'
-            : formatter.format(_selectedDate!),
+      child: Column(
+        children: [
+          TransactionForm(
+            titleController: _titleController,
+            showCalendar: _afficheCalendrier,
+            amountController: _amountController,
+            selectedDate: _selectedDate == null
+                ? 'Selecte Date'
+                : formatter.format(_selectedDate!),
+
+            // value: _selectedCategory,
+            
+            
+          ),
+          Row(
+            children: [
+              DropdownButton(
+                items: Category.values
+                .map((category) => DropdownMenuItem(
+                      value: category,
+                      child: Text(category.name),
+                    ))
+                .toList(),
+                onChanged: (value){
+                  setState(() {
+                    if (value == null) {
+                      return;
+                    }
+                    _selectedCategory = value;
+                  });
+                },
+              ),
+              TextButton(onPressed: () {}, child: const Text('Cancel'),),
+              TextButton(onPressed: _submitData, child: const Text('Confirm')),
+            ],
+          
+          )
+        ],
       ),
       
     );

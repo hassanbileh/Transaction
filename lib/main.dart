@@ -38,30 +38,26 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _userTransactions = [
-   /* Transaction(
-        id: 'T1', title: 'New iPhone', amount: 599.99, date: DateTime.now()),
-    Transaction(
-        id: 'T2', title: 'The Rent Bill', amount: 59.99, date: DateTime.now()),
-    Transaction(
-        id: 'T3', title: 'New t-shirt', amount: 29.99, date: DateTime.now()),
-    Transaction(
-        id: 'T4', title: 'Week Groceries', amount: 79.99, date: DateTime.now()),
-        */
-  ];
+  final List<Transaction> _userTransactions = [];
 
   
 
 // Fonction d'ajout d'une instance de la classe transaction
-  void _addNewTransaction(String txTitle, double txAmount, DateTime txDate) {
+  void _addNewTransaction(String txTitle, double txAmount, DateTime txDate, Category txCategory) {
     final newTx = Transaction(
       title: txTitle,
       amount: txAmount,
-      date: txDate, 
+      date: txDate, category: txCategory, 
     );
 
     setState(() {
       _userTransactions.add(newTx);
+    });
+  }
+
+  void _removeTransaction(Transaction transaction){
+    setState(() {
+      _userTransactions.remove(transaction);
     });
   }
 
@@ -118,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       )),
                 ],
               ),
-              TransactionList(_userTransactions),
+              TransactionList(transactions: _userTransactions, onRemoveTransaction: _removeTransaction,),
             ],
           ),
         
