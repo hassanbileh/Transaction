@@ -1,103 +1,84 @@
 // ignore_for_file: prefer_const_constructors, avoid_print, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:transaction/widgets/constants/transaction_form.dart';
+
+final formatter = DateFormat.yMMMd();
 
 class NewTransaction extends StatefulWidget {
   final Function addTx;
 
-  NewTransaction(this.addTx);
+  const NewTransaction(this.addTx);
 
   @override
   State<NewTransaction> createState() => _NewTransactionState();
 }
 
 class _NewTransactionState extends State<NewTransaction> {
-  final titleController = TextEditingController();
-  final amountController = TextEditingController();
-  void submitData(){
-    final enteredTitle = titleController.text;
-    final enteredAmount = double.parse(amountController.text);
-    if (enteredTitle.isEmpty || enteredAmount <= 0 ){
+  final _titleController = TextEditingController();
+  final _amountController = TextEditingController();
+  DateTime? _selectedDate;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _amountController.dispose();
+    super.dispose();
+  }
+
+  void _afficheCalendrier() async {
+    final now = DateTime.now();
+    final first = DateTime(now.year - 1, now.month, now.day);
+    final last = now;
+
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: now,
+      firstDate: first,
+      lastDate: last,
+    );
+    setState(() {
+      _selectedDate = pickedDate;
+    });
+  }
+
+  void _submitData() {
+    final enteredTitle = _titleController.text;
+    final enteredAmount = double.parse(_amountController.text);
+    final enteredDate = _selectedDate;
+    if (enteredTitle.isEmpty || enteredAmount <= 0 || enteredDate == null) {
       return;
-    } 
+    }
 
     //widget s'ajoute lorsqu'on a transformer en Statefull widget pour acceder a la propriété de la classe widget
-    widget.addTx(enteredTitle,enteredAmount);
+    widget.addTx(enteredTitle, enteredAmount, enteredDate);
 
-  // Fermer automatiquement le formulaire après avoir ajouter
+    // Fermer automatiquement le formulaire après avoir ajouter
     Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-            elevation: 5,
-            child: Container(
-              padding: EdgeInsets.all(10),
-              margin: EdgeInsets.all(10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Champs Titre 
-                  TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Add the Title',
-                      labelText: 'Title',
-                    ),
-                    //onChanged: (value) => titleInput = value,
-                    controller: titleController,
-                    onSubmitted: (_) => submitData(),
-                  ),
-
-                  // Champs Amount
-                  TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Add the Amount',
-                      labelText: 'Amount',
-                    ),
-                    //onChanged: (value) => amountInput = value,
-                    controller: amountController,
-                    keyboardType: TextInputType.numberWithOptions(decimal: true),
-                    onSubmitted: (_) => submitData(),
-                  ),
-
-                  // Champs Date 
-                  TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Add the Date',
-                      labelText: 'Date',
-                      
-                    ),
-                    keyboardType: TextInputType.datetime,
-                    onSubmitted: (_) => submitData(),
-                  ),
-
-                  // Boutton d'Ajout 
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      children: [
-                        OutlinedButton(
-                          child: Text(
-                            'Add Transaction',
-                            style: TextStyle(color: Colors.green),
-                          ),
-                          onPressed: () => {
-                            print(titleController.text),
-                            print(amountController.text),
-                            submitData,
-                            
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
+    return Container(
+      height: 400,
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.all(10),
+      child: TransactionForm(
+        titleController: _titleController,
+        submitData: _submitData,
+        showCalendar: _afficheCalendrier,
+        amountController: _amountController,
+        selectedDate: _selectedDate == null
+            ? 'Selecte Date'
+            : formatter.format(_selectedDate!),
+      ),
+      
+    );
   }
 }

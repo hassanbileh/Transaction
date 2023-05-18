@@ -15,8 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Personal ',
       theme: ThemeData(
-        primarySwatch: Colors.brown,
-        accentColor: Colors.brown, //Couleur de floatingBouttonBottom
+        primarySwatch: Colors.brown,//Couleur de floatingBouttonBottom
         appBarTheme: const AppBarTheme(
           color: Colors.brown,
           titleTextStyle: TextStyle(
@@ -51,13 +50,14 @@ class _MyHomePageState extends State<MyHomePage> {
         */
   ];
 
-// Fonction d'ajout d'une transaction dans new transaction
-  void _addNewTransaction(String txTitle, double txAmount) {
+  
+
+// Fonction d'ajout d'une instance de la classe transaction
+  void _addNewTransaction(String txTitle, double txAmount, DateTime txDate) {
     final newTx = Transaction(
       title: txTitle,
       amount: txAmount,
-      date: DateTime.now(),
-      id: DateTime.now().toString(),
+      date: txDate, 
     );
 
     setState(() {
@@ -68,6 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
 // Fenetre de pop-up du formulaire Ajout Transaction
   void _startAddNewTransaction(BuildContext ctx) {
     showModalBottomSheet(
+      isScrollControlled: true,
       context: ctx,
       builder: (_) {
         return NewTransaction(_addNewTransaction);
@@ -100,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Card(
                     child: Text('Card !'),
                   )),
-             //  Personal Expenses
+             //  Personal Expanses
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
