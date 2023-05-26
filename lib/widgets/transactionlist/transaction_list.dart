@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:transaction/widgets/no_transaction.dart';
-import 'package:transaction/widgets/transaction_items.dart';
-import '../models/transaction.dart';
+import 'package:transaction/widgets/transactionlist/transaction_items.dart';
+import '../../models/transaction.dart';
 
 class TransactionList extends StatelessWidget {
   const TransactionList({super.key, required this.transactions, required this.onRemoveTransaction});

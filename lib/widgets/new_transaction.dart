@@ -50,6 +50,9 @@ class _NewTransactionState extends State<NewTransaction> {
     });
   }
 
+  
+
+// Enregistrer la Transaction
   void _submitData() {
     final enteredTitle = _titleController.text.trim();
     final enteredAmount = double.parse(_amountController.text);
@@ -82,14 +85,6 @@ class _NewTransactionState extends State<NewTransaction> {
     Navigator.of(context).pop();
   }
 
-  _submitCategory(Category? category) {
-    setState(() {
-      if (category == null) {
-        return;
-      }
-      _selectedCategory = category;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

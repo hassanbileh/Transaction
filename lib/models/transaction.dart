@@ -36,3 +36,29 @@ class Transaction {
 
   String get formattedDate => formatter.format(date);
 }
+
+class TransactionBucket {
+  const TransactionBucket({
+    required this.category,
+    required this.transactions,
+  });
+
+  final Category category;
+  final List<Transaction> transactions;
+  
+  //factory constructor for filtering per category
+  TransactionBucket.forCategory(
+      List<Transaction> allTransactions, this.category)
+      : transactions = allTransactions
+            .where((transaction) => transaction.category == category)
+            .toList();
+
+  double get totalTransactions {
+    double sum = 0;
+
+    for (final transaction in transactions) {
+      sum += transaction.amount;
+    }
+    return sum;
+  }
+}
