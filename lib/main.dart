@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:transaction/widgets/home.dart';
+// import 'package:flutter/services.dart';
 
 var kColorSheme = ColorScheme.fromSeed(
   seedColor: Color.fromARGB(255, 28, 232, 184),
@@ -12,7 +13,16 @@ var kDarkColorSheme = ColorScheme.fromSeed(
 );
 
 void main() {
+
+  // WidgetsFlutterBinding.ensureInitialized();
+
+  //Lock Device orientation
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp
+  // ]).then((value) => runApp(MyApp()));
+
   runApp(MyApp());
+  
 }
 
 class MyApp extends StatelessWidget {

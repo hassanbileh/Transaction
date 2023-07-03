@@ -40,7 +40,7 @@ class Chart extends StatelessWidget {
         horizontal: 8,
       ),
       width: double.infinity,
-      height: 180,
+      height: 130,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         gradient: LinearGradient(
@@ -73,7 +73,7 @@ class Chart extends StatelessWidget {
                 .map(
                   (bucket) => Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 2),
                       child: Icon(
                         categorieIcons[bucket.category],
                         color: isDarkMode

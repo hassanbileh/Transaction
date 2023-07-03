@@ -46,7 +46,7 @@ class TransactionBucket {
   final Category category;
   final List<Transaction> transactions;
   
-  //factory constructor for filtering per category
+  //factory constructor for filtering transaction per category
   TransactionBucket.forCategory(
       List<Transaction> allTransactions, this.category)
       : transactions = allTransactions

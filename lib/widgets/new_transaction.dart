@@ -123,8 +123,12 @@ class _NewTransactionState extends State<NewTransaction> {
                     _selectedCategory = value;
                   });
                 },
+                value: _selectedCategory,
+
               ),
-              TextButton(onPressed: () {}, child: const Text('Cancel'),),
+              TextButton(onPressed: () {
+                Navigator.of(context).pop();
+              }, child: const Text('Cancel'),),
               TextButton(onPressed: _submitData, child: const Text('Confirm')),
             ],
           

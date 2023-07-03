@@ -36,20 +36,20 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        duration: const Duration(
-          seconds: 3,
-        ),
-        content: const Text('Transaction deleted'),
-        backgroundColor: Colors.grey[800],
-        action: SnackBarAction(
-          label: 'Undo',
-          onPressed: () {
-            setState(() {
-              _userTransactions.insert(transactionIndex, transaction);
-            });
-          },
-        ),
-        ));
+      duration: const Duration(
+        seconds: 3,
+      ),
+      content: const Text('Transaction deleted'),
+      backgroundColor: Colors.grey[800],
+      action: SnackBarAction(
+        label: 'Undo',
+        onPressed: () {
+          setState(() {
+            _userTransactions.insert(transactionIndex, transaction);
+          });
+        },
+      ),
+    ));
   }
 
 // Fenetre de pop-up du formulaire Ajout Transaction
@@ -66,50 +66,81 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Personal Expenses'),
+        title: const Text('Personal Expenses'),
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () => _startAddNewTransaction(context),
           ),
         ],
       ),
-      body: Column(
-        //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //   crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.all(5),
-              width: double.infinity,
-              child: Card(
-                child: Chart(transactions: _userTransactions),
-              )),
-          //  Personal Expanses
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                  margin: const EdgeInsets.all(3),
-                  padding: const EdgeInsets.all(5),
-                  child: const Text(
-                    'Recent Expenses',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'Quicksand',
-                      fontWeight: FontWeight.w800,
+      body: width < 600
+          ? Column(
+              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //   crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: Chart(transactions: _userTransactions),
+                ),
+                //  Personal Expanses
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(3),
+                      padding: const EdgeInsets.all(5),
+                      child: const Text(
+                        'Recent Expenses',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'Quicksand',
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
                     ),
-                  )),
-            ],
-          ),
-          TransactionList(
-            transactions: _userTransactions,
-            onRemoveTransaction: _removeTransaction,
-          ),
-        ],
-      ),
+                  ],
+                ),
+                Expanded(
+                  child: TransactionList(
+                    transactions: _userTransactions,
+                    onRemoveTransaction: _removeTransaction,
+                  ),
+                ),
+              ],
+            )
+          : Row(
+              // mainAxisAlignment: MainAxisAlignment.start,
+              //   crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: Chart(transactions: _userTransactions),
+                ),
+                //  Personal Expanses
+                Expanded(
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Recent Expenses',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'Quicksand',
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      Expanded(
+                        child: TransactionList(
+                          transactions: _userTransactions,
+                          onRemoveTransaction: _removeTransaction,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
